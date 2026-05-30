@@ -7,6 +7,7 @@ export type ClassSession = {
 export type ClassDay = {
   day: string;
   focus: string;
+  coaches: string[];
   sessions: ClassSession[];
 };
 
@@ -21,73 +22,48 @@ export const clubContact = {
   locality: "Santry, Dublin",
 };
 
+export const karateDiscipline = "Kenpo";
+
 export const classTimetable: ClassDay[] = [
   {
     day: "Tuesday",
     focus: "Kata",
+    coaches: ["Joe", "Dylan"],
     sessions: [
       {
-        group: "Dragons",
-        ages: "6 to 8 years",
-        time: "6:00 PM to 6:45 PM",
+        group: "4-6 years",
+        time: "5:30 PM to 6:00 PM",
       },
       {
-        group: "Panthers",
-        ages: "9 years to teens",
-        time: "7:00 PM to 7:45 PM",
+        group: "7-9 years",
+        time: "6:15 PM to 7:00 PM",
       },
       {
-        group: "Intermediate",
-        ages: "teens to adults",
-        time: "8:00 PM to 9:00 PM",
+        group: "10-12 years",
+        time: "7:15 PM to 8:00 PM",
+      },
+      {
+        group: "13+ years",
+        time: "8:15 PM to 9:00 PM",
       },
     ],
   },
   {
     day: "Thursday",
     focus: "Kumite",
+    coaches: ["Shauna"],
     sessions: [
       {
-        group: "Lions",
-        ages: "4 and 5 years",
-        time: "5:15 PM to 6:00 PM",
+        group: "7-9 years",
+        time: "6:00 PM to 7:00 PM",
       },
       {
-        group: "Dragons",
-        time: "6:00 PM to 6:45 PM",
+        group: "10-12 years",
+        time: "7:00 PM to 8:00 PM",
       },
       {
-        group: "Panthers",
-        time: "7:00 PM to 7:45 PM",
-      },
-      {
-        group: "Intermediate and advanced",
-        time: "7:45 PM to 9:00 PM",
-      },
-    ],
-  },
-  {
-    day: "Saturday",
-    focus: "Kata and Kumite",
-    sessions: [
-      {
-        group: "Team Kata",
-        time: "9:00 AM to 10:00 AM",
-      },
-      {
-        group: "Open Kata",
-        ages: "age 10 and above",
-        time: "10:00 AM to 11:15 AM",
-      },
-      {
-        group: "Kumite",
-        ages: "under 12 years",
-        time: "11:30 AM to 12:45 PM",
-      },
-      {
-        group: "Kumite",
-        ages: "over 12 years",
-        time: "1:00 PM",
+        group: "13+ years",
+        time: "8:00 PM to 9:00 PM",
       },
     ],
   },

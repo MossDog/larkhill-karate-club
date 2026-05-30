@@ -3,6 +3,7 @@ import {
   CalendarDays,
   Camera,
   ChevronRight,
+  ImageIcon,
   MapPin,
   ShieldCheck,
   Trophy,
@@ -18,7 +19,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { classTimetable, clubContact, galleryCategories } from "@/lib/club-content";
+import {
+  classTimetable,
+  clubContact,
+  galleryCategories,
+  karateDiscipline,
+} from "@/lib/club-content";
 import { cn } from "@/lib/utils";
 
 export default function Home() {
@@ -34,7 +40,9 @@ export default function Home() {
               <span className="block text-lg font-bold leading-5">
                 Larkhill Karate Club
               </span>
-              <span className="text-sm text-zinc-600">Shotokan in Santry</span>
+              <span className="text-sm text-zinc-600">
+                {karateDiscipline} in Santry
+              </span>
             </span>
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-700 md:flex">
@@ -56,7 +64,7 @@ export default function Home() {
               Larkhill Karate Club
             </h1>
             <p className="mt-5 max-w-2xl text-xl leading-8 text-zinc-700">
-              Shotokan karate classes for children, teens, and adults with a
+              {karateDiscipline} karate classes for children, teens, and adults with a
               practical path through training, gradings, and competition.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -83,7 +91,7 @@ export default function Home() {
             <div className="rounded-md bg-zinc-950 p-5 text-white">
               <ShieldCheck className="mb-10 size-8 text-red-500" />
               <p className="text-2xl font-bold leading-8">
-                Traditional standards, welcoming classes.
+                Kenpo standards, welcoming classes.
               </p>
             </div>
             <div className="rounded-md bg-red-700 p-5 text-white">
@@ -117,19 +125,37 @@ export default function Home() {
             <h2 className="mt-2 text-3xl font-black">Train during the week</h2>
           </div>
           <p className="max-w-xl text-lg leading-8 text-zinc-700">
-            Kata, kumite, and grading preparation across age-appropriate groups.
+            Tuesday kata and Thursday kumite classes, led by named coaches across
+            age-appropriate groups.
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-2">
           {classTimetable.map((item) => (
-            <Card key={`${item.day}-${item.focus}`} className="rounded-md">
+            <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md">
+              <div className="flex min-h-44 items-end bg-zinc-950 p-5 text-white">
+                <div>
+                  <ImageIcon className="mb-4 size-8 text-red-500" />
+                  <p className="text-sm font-bold uppercase text-zinc-400">
+                    Club photo space
+                  </p>
+                  <p className="mt-2 max-w-sm text-lg font-semibold leading-7">
+                    Add a real {item.focus.toLowerCase()} class image here when
+                    club photos are available.
+                  </p>
+                </div>
+              </div>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarDays className="size-5 text-red-700" />
                   {item.day}
                 </CardTitle>
-                <CardDescription className="text-base font-semibold text-zinc-700">
-                  {item.focus}
+                <CardDescription className="text-base text-zinc-700">
+                  <span className="font-semibold">{item.focus}</span>
+                  <span className="mx-2 text-zinc-400">|</span>
+                  <span>
+                    {item.coaches.length === 1 ? "Coach" : "Coaches"}{" "}
+                    {item.coaches.join(" & ")}
+                  </span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">

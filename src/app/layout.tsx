@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Larkhill Karate Club",
   description:
-    "Shotokan karate classes for children, teens, and adults in Santry, Dublin.",
+    "Kenpo karate classes for children, teens, and adults in Santry, Dublin.",
 };
 
 export default function RootLayout({
