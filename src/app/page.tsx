@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   classTimetable,
   clubContact,
@@ -25,33 +26,26 @@ import { cn } from "@/lib/utils";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#f8f7f4] pb-20 text-zinc-950 md:pb-0">
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-center px-5 py-4">
-          <nav className="hidden items-center gap-1 rounded-full border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-sm backdrop-blur md:flex">
-            <Link className="rounded-full px-4 py-2 hover:bg-zinc-100" href="#classes">
-              Classes
-            </Link>
-            <Link className="rounded-full px-4 py-2 hover:bg-zinc-100" href="#gallery">
-              Gallery
-            </Link>
-            <Link className="rounded-full px-4 py-2 hover:bg-zinc-100" href="#contact">
-              Contact
-            </Link>
-            <Link
-              className="rounded-full px-4 py-2 hover:bg-zinc-100"
-              href="/staff/gallery"
-            >
-              Staff
-            </Link>
-          </nav>
-        </div>
-      </header>
-      <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-full border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur md:hidden">
-        <Link href="#classes">Classes</Link>
-        <Link href="#gallery">Gallery</Link>
-        <Link href="#contact">Contact</Link>
-        <Link href="/staff/gallery">Staff</Link>
+    <main className="min-h-screen bg-[#f8f7f4] pb-24 text-zinc-950 md:pb-0">
+      <nav className="fixed bottom-3 left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-3xl border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur lg:bottom-auto lg:left-4 lg:top-1/2 lg:w-auto lg:max-w-none lg:-translate-x-0 lg:-translate-y-1/2 lg:flex-col lg:justify-center lg:px-2 lg:py-1">
+        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#classes">
+          Classes
+        </Link>
+        <Separator className="hidden w-8 lg:block" />
+        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#gallery">
+          Gallery
+        </Link>
+        <Separator className="hidden w-8 lg:block" />
+        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#contact">
+          Contact
+        </Link>
+        <Separator className="hidden w-8 lg:block" />
+        <Link
+          className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4"
+          href="/staff/gallery"
+        >
+          Staff
+        </Link>
       </nav>
 
       <section className="border-b border-zinc-200 bg-white">
