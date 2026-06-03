@@ -1,17 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   CalendarDays,
-  Camera,
   ChevronRight,
-  ImageIcon,
-  MapPin,
-  ShieldCheck,
-  Trophy,
-  Users,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { GalleryFeed } from "@/components/gallery-feed";
 import {
   Card,
   CardContent,
@@ -22,7 +18,7 @@ import {
 import {
   classTimetable,
   clubContact,
-  galleryCategories,
+  galleryPosts,
   karateDiscipline,
 } from "@/lib/club-content";
 import { cn } from "@/lib/utils";
@@ -31,23 +27,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#f8f7f4] text-zinc-950">
       <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-md bg-red-700 text-lg font-black text-white">
-              LK
-            </span>
-            <span>
-              <span className="block text-lg font-bold leading-5">
-                Larkhill Karate Club
-              </span>
-              <span className="text-sm text-zinc-600">
-                {karateDiscipline} in Santry
-              </span>
-            </span>
-          </Link>
+        <div className="mx-auto flex max-w-6xl items-center justify-center px-5 py-4">
           <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-700 md:flex">
             <Link href="#classes">Classes</Link>
-            <Link href="/gallery">Gallery</Link>
+            <Link href="#gallery">Gallery</Link>
             <Link href="#contact">Contact</Link>
             <Link href="/staff/gallery">Staff</Link>
           </nav>
@@ -55,62 +38,46 @@ export default function Home() {
       </header>
 
       <section className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20">
-          <div className="flex flex-col justify-center">
-            <Badge className="mb-5 w-fit bg-red-700 text-white hover:bg-red-700">
-              {clubContact.locality}
-            </Badge>
-            <h1 className="max-w-3xl text-4xl font-black leading-tight text-zinc-950 sm:text-5xl">
-              Larkhill Karate Club
-            </h1>
-            <p className="mt-5 max-w-2xl text-xl leading-8 text-zinc-700">
-              {karateDiscipline} karate classes for children, teens, and adults with a
-              practical path through training, gradings, and competition.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="#classes"
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "bg-red-700 text-white hover:bg-red-800"
-                )}
-              >
-                View classes
-                <ChevronRight className="size-5" />
-              </Link>
-              <Link
-                href="#contact"
-                className={buttonVariants({ size: "lg", variant: "outline" })}
-              >
-                Contact the club
-              </Link>
+        <div className="mx-auto max-w-6xl px-5 py-14 md:py-20">
+          <div className="grid gap-8 md:grid-cols-[auto_1fr] md:items-center">
+            <div className="flex justify-start">
+              <Image
+                src="/brand/logo.png"
+                alt="Larkhill Karate Club"
+                width={1000}
+                height={1000}
+                className="size-40 shrink-0 object-contain sm:size-52 md:size-64"
+              />
             </div>
-          </div>
-
-          <div className="grid min-h-[360px] grid-cols-2 gap-3">
-            <div className="rounded-md bg-zinc-950 p-5 text-white">
-              <ShieldCheck className="mb-10 size-8 text-red-500" />
-              <p className="text-2xl font-bold leading-8">
-                Kenpo standards, welcoming classes.
+            <div className="flex flex-col justify-center">
+              <Badge className="mb-5 w-fit bg-red-700 text-white hover:bg-red-700">
+                {clubContact.locality}
+              </Badge>
+              <h1 className="text-4xl font-black leading-tight text-zinc-950 sm:text-5xl">
+                Larkhill Karate Club
+              </h1>
+              <p className="mt-5 max-w-2xl text-xl leading-8 text-zinc-700">
+                {karateDiscipline} karate classes for children, teens, and adults
+                with a practical path through training, gradings, and competition.
               </p>
-            </div>
-            <div className="rounded-md bg-red-700 p-5 text-white">
-              <Trophy className="mb-10 size-8" />
-              <p className="text-2xl font-bold leading-8">
-                Training for gradings and competitions.
-              </p>
-            </div>
-            <div className="rounded-md bg-emerald-700 p-5 text-white">
-              <Users className="mb-10 size-8" />
-              <p className="text-2xl font-bold leading-8">
-                Clear groups for kids, teens, and adults.
-              </p>
-            </div>
-            <div className="rounded-md border border-zinc-200 bg-[#f8f7f4] p-5">
-              <MapPin className="mb-10 size-8 text-red-700" />
-              <p className="text-2xl font-bold leading-8 text-zinc-950">
-                Based in Larkhill, Santry.
-              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="#classes"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "bg-red-700 text-white hover:bg-red-800"
+                  )}
+                >
+                  View classes
+                  <ChevronRight className="size-5" />
+                </Link>
+                <Link
+                  href="#contact"
+                  className={buttonVariants({ size: "lg", variant: "outline" })}
+                >
+                  Contact the club
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -132,16 +99,19 @@ export default function Home() {
         <div className="grid gap-5 lg:grid-cols-2">
           {classTimetable.map((item) => (
             <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md">
-              <div className="flex min-h-44 items-end bg-zinc-950 p-5 text-white">
-                <div>
-                  <ImageIcon className="mb-4 size-8 text-red-500" />
-                  <p className="text-sm font-bold uppercase text-zinc-400">
-                    Club photo space
+              <div className="relative aspect-[16/10] bg-zinc-950">
+                <Image
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-5 text-white">
+                  <p className="text-sm font-bold uppercase text-white/75">
+                    {item.focus}
                   </p>
-                  <p className="mt-2 max-w-sm text-lg font-semibold leading-7">
-                    Add a real {item.focus.toLowerCase()} class image here when
-                    club photos are available.
-                  </p>
+                  <p className="mt-1 text-2xl font-black">{item.day}</p>
                 </div>
               </div>
               <CardHeader>
@@ -186,29 +156,13 @@ export default function Home() {
               <p className="text-sm font-bold uppercase text-red-700">
                 Club gallery
               </p>
-              <h2 className="mt-2 text-3xl font-black">Moments from the mat</h2>
+              <h2 className="mt-2 text-3xl font-black">Media from the club</h2>
             </div>
-            <Link
-              href="/gallery"
-              className={buttonVariants({ variant: "outline" })}
-            >
-              Open gallery
-              <Camera className="size-5" />
-            </Link>
+            <p className="max-w-xl text-lg leading-8 text-zinc-700">
+              A simple scrolling feed for photos and videos uploaded by staff.
+            </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {galleryCategories.map((category) => (
-              <div
-                key={category.title}
-                className="flex aspect-[4/3] flex-col justify-end rounded-md bg-zinc-950 p-4 text-white"
-              >
-                <p className="text-xl font-bold">{category.title}</p>
-                <p className="mt-2 text-sm text-zinc-300">
-                  {category.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          <GalleryFeed posts={galleryPosts} />
         </div>
       </section>
 

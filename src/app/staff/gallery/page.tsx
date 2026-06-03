@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Eye, ImagePlus, Trash2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ImagePlus, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -12,29 +12,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { galleryCategories } from "@/lib/club-content";
 import { cn } from "@/lib/utils";
 
-const drafts = [
+const recentUploads = [
   {
     title: "May grading",
-    category: "Gradings",
     count: "18 photos",
-    status: "Draft",
+    caption: "A few moments from the latest grading.",
   },
   {
-    title: "Saturday squad training",
-    category: "Training",
-    count: "9 photos",
-    status: "Published",
+    title: "Squad training upload",
+    count: "4 photos, 1 video",
+    caption: "A batch upload from one training session.",
   },
 ];
 
@@ -67,8 +57,8 @@ export default function StaffGalleryPage() {
                 Gallery upload
               </CardTitle>
               <CardDescription className="text-lg leading-8">
-                Add training, grading, competition, and event media for the
-                public gallery.
+                Add photos or short videos to the public gallery. Captions are
+                optional and can be edited later.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -80,7 +70,9 @@ export default function StaffGalleryPage() {
                     </span>
                     <div>
                       <p className="text-2xl font-black">Upload media</p>
-                      <p className="text-lg text-zinc-700">Photos or short videos</p>
+                      <p className="text-lg text-zinc-700">
+                        Choose one file or several at once
+                      </p>
                     </div>
                   </div>
                   <Button size="lg" className="bg-red-700 text-lg hover:bg-red-800">
@@ -92,7 +84,7 @@ export default function StaffGalleryPage() {
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="event-name" className="text-lg font-bold">
-                    Event name
+                    Title
                   </Label>
                   <Input
                     id="event-name"
@@ -102,39 +94,9 @@ export default function StaffGalleryPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="event-date" className="text-lg font-bold">
-                    Date
+                    Date taken
                   </Label>
                   <Input id="event-date" type="date" className="h-14 text-lg" />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-lg font-bold">Category</Label>
-                  <Select>
-                    <SelectTrigger className="h-14 text-lg">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {galleryCategories.map((category) => (
-                        <SelectItem
-                          key={category.title}
-                          value={category.title.toLowerCase().replaceAll(" ", "-")}
-                        >
-                          {category.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-lg font-bold">Visibility</Label>
-                  <Select defaultValue="draft">
-                    <SelectTrigger className="h-14 text-lg">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
 
@@ -145,18 +107,14 @@ export default function StaffGalleryPage() {
                 <Textarea
                   id="description"
                   className="min-h-32 text-lg"
-                  placeholder="Short gallery caption"
+                  placeholder="Optional short caption"
                 />
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button size="lg" className="h-14 bg-red-700 text-lg hover:bg-red-800">
                   <CheckCircle2 className="size-6" />
-                  Save gallery item
-                </Button>
-                <Button size="lg" variant="outline" className="h-14 text-lg">
-                  <Eye className="size-6" />
-                  Preview
+                  Save to gallery
                 </Button>
               </div>
             </CardContent>
@@ -168,32 +126,21 @@ export default function StaffGalleryPage() {
             <CardHeader>
               <CardTitle className="text-2xl font-black">Gallery items</CardTitle>
               <CardDescription className="text-base">
-                Recent uploads will appear here after Supabase is connected.
+                Uploaded media will appear here after Supabase is connected.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {drafts.map((item) => (
+              {recentUploads.map((item) => (
                 <div
                   key={item.title}
                   className="rounded-md border border-zinc-200 bg-white p-4"
                 >
-                  <div className="mb-3 flex items-start justify-between gap-3">
+                  <div className="mb-3">
                     <div>
                       <p className="text-lg font-black">{item.title}</p>
-                      <p className="text-zinc-700">
-                        {item.category} - {item.count}
-                      </p>
+                      <p className="text-zinc-700">{item.count}</p>
+                      <p className="mt-2 text-zinc-700">{item.caption}</p>
                     </div>
-                    <Badge
-                      variant={item.status === "Published" ? "default" : "secondary"}
-                      className={
-                        item.status === "Published"
-                          ? "bg-emerald-700"
-                          : "bg-zinc-200 text-zinc-900"
-                      }
-                    >
-                      {item.status}
-                    </Badge>
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">
