@@ -27,21 +27,21 @@ import { cn } from "@/lib/utils";
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#f8f7f4] pb-24 text-zinc-950 md:pb-0">
-      <nav className="fixed bottom-3 left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-3xl border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur lg:bottom-auto lg:left-4 lg:top-1/2 lg:w-auto lg:max-w-none lg:-translate-x-0 lg:-translate-y-1/2 lg:flex-col lg:justify-center lg:px-2 lg:py-1">
-        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#classes">
+      <nav className="fixed bottom-3 left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-3xl border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur lg:bottom-auto lg:left-4 lg:top-1/2 lg:grid lg:w-max lg:max-w-none lg:-translate-x-0 lg:-translate-y-1/2 lg:grid-cols-1 lg:p-0">
+        <Link className="rounded-t-3xl px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#classes">
           Classes
         </Link>
-        <Separator className="hidden w-8 lg:block" />
-        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#gallery">
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
+        <Link className="px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#gallery">
           Gallery
         </Link>
-        <Separator className="hidden w-8 lg:block" />
-        <Link className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4" href="#contact">
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
+        <Link className="px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#contact">
           Contact
         </Link>
-        <Separator className="hidden w-8 lg:block" />
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
         <Link
-          className="rounded-full px-3 py-2 hover:bg-zinc-100 lg:p-4"
+          className="rounded-b-3xl px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center"
           href="/staff/gallery"
         >
           Staff
@@ -109,7 +109,7 @@ export default function Home() {
         </div>
         <div className="grid gap-5 lg:grid-cols-2">
           {classTimetable.map((item) => (
-            <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md">
+            <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md pt-0 shadow-lg">
               <div className="relative aspect-[16/10] bg-zinc-950">
                 <Image
                   src={item.image.src}

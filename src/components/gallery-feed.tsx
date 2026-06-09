@@ -24,6 +24,11 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
   const activeItem = activePost?.media[activeMediaIndex] ?? null;
   const activePostNumber = activePostIndex === null ? 0 : activePostIndex + 1;
 
+  const openPost = (index: number) => {
+    setActivePostIndex(index);
+    setActiveMediaIndex(0);
+  };
+
   const close = useCallback(() => setActivePostIndex(null), []);
   const showPrevious = useCallback(() => {
     setActivePostIndex((currentPostIndex) => {
@@ -139,10 +144,7 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
               <button
                 key={post.id}
                 type="button"
-                onClick={() => {
-                  setActivePostIndex(index);
-                  setActiveMediaIndex(0);
-                }}
+                onClick={() => openPost(index)}
                 className="group relative aspect-square overflow-hidden rounded-md bg-zinc-950 text-left shadow-sm ring-1 ring-zinc-200 transition hover:opacity-95 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-red-700"
                 aria-label={`Open ${post.caption}`}
               >
@@ -268,12 +270,12 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
 function MediaThumbnail({ item }: { item: GalleryMedia }) {
   if (item.type === "video") {
     return (
-      <video
-        src={item.src}
-        className="size-full object-cover transition duration-300 group-hover:scale-105"
-        muted
-        playsInline
-        preload="metadata"
+        <video
+          src={item.src}
+          className="size-full object-cover transition duration-300 group-hover:scale-105"
+          muted
+          playsInline
+          preload="metadata"
       />
     );
   }
