@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   classTimetable,
   clubContact,
@@ -25,17 +26,27 @@ import { cn } from "@/lib/utils";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#f8f7f4] text-zinc-950">
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-center px-5 py-4">
-          <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-700 md:flex">
-            <Link href="#classes">Classes</Link>
-            <Link href="#gallery">Gallery</Link>
-            <Link href="#contact">Contact</Link>
-            <Link href="/staff/gallery">Staff</Link>
-          </nav>
-        </div>
-      </header>
+    <main className="min-h-screen bg-[#f8f7f4] pb-24 text-zinc-950 md:pb-0">
+      <nav className="fixed bottom-3 left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-3xl border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur lg:bottom-auto lg:left-4 lg:top-1/2 lg:grid lg:w-max lg:max-w-none lg:-translate-x-0 lg:-translate-y-1/2 lg:grid-cols-1 lg:p-0">
+        <Link className="rounded-t-3xl px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#classes">
+          Classes
+        </Link>
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
+        <Link className="px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#gallery">
+          Gallery
+        </Link>
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
+        <Link className="px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#contact">
+          Contact
+        </Link>
+        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
+        <Link
+          className="rounded-b-3xl px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center"
+          href="/staff/gallery"
+        >
+          Staff
+        </Link>
+      </nav>
 
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto max-w-6xl px-5 py-14 md:py-20">
@@ -98,7 +109,7 @@ export default function Home() {
         </div>
         <div className="grid gap-5 lg:grid-cols-2">
           {classTimetable.map((item) => (
-            <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md">
+            <Card key={`${item.day}-${item.focus}`} className="overflow-hidden rounded-md pt-0 shadow-lg">
               <div className="relative aspect-[16/10] bg-zinc-950">
                 <Image
                   src={item.image.src}
