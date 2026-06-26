@@ -20,7 +20,6 @@ import {
   classTimetable,
   clubContact,
   coaches,
-  galleryPosts,
   karateDiscipline,
 } from "@/lib/club-content";
 import { getUploadedGalleryPosts } from "@/lib/gallery";
@@ -30,8 +29,6 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const uploadedGalleryPosts = await getUploadedGalleryPosts();
-  const visibleGalleryPosts =
-    uploadedGalleryPosts.length > 0 ? uploadedGalleryPosts : galleryPosts;
 
   return (
     <main className="min-h-screen bg-[#f8f7f4] pb-24 text-zinc-950 md:pb-0">
@@ -207,7 +204,7 @@ export default async function Home() {
               <h2 className="mt-2 text-3xl font-black">Media from the club</h2>
             </div>
           </div>
-          <GalleryFeed posts={visibleGalleryPosts} />
+          <GalleryFeed posts={uploadedGalleryPosts} />
         </div>
       </section>
 

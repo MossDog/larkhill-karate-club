@@ -18,6 +18,7 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
+  const hasPosts = posts.length > 0;
 
   const activePost =
     activePostIndex === null ? null : posts[activePostIndex] ?? null;
@@ -135,46 +136,54 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
   return (
     <>
       <div className="max-h-[560px] overflow-y-auto rounded-md border border-zinc-200 bg-[#f8f7f4] p-2 sm:p-3">
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-          {posts.map((post, index) => {
-            const cover = post.media[0];
-            const isGrouped = post.media.length > 1;
+        {hasPosts ? (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+            {posts.map((post, index) => {
+              const cover = post.media[0];
+              const isGrouped = post.media.length > 1;
 
-            return (
-              <button
-                key={post.id}
-                type="button"
-                onClick={() => openPost(index)}
-                className="group relative aspect-square overflow-hidden rounded-md bg-zinc-950 text-left shadow-sm ring-1 ring-zinc-200 transition hover:opacity-95 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-red-700"
-                aria-label={`Open ${post.caption}`}
-              >
-                <MediaThumbnail item={cover} />
-                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-white">
-                  <span className="flex items-end justify-between gap-2">
-                    <span className="text-sm font-bold">{post.caption}</span>
-                    {cover.type === "video" ? (
-                      <Play className="size-4 shrink-0 fill-white opacity-90" />
+              return (
+                <button
+                  key={post.id}
+                  type="button"
+                  onClick={() => openPost(index)}
+                  className="group relative aspect-square overflow-hidden rounded-md bg-zinc-950 text-left shadow-sm ring-1 ring-zinc-200 transition hover:opacity-95 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                  aria-label={`Open ${post.caption}`}
+                >
+                  <MediaThumbnail item={cover} />
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-white">
+                    <span className="flex items-end justify-between gap-2">
+                      <span className="text-sm font-bold">{post.caption}</span>
+                      {cover.type === "video" ? (
+                        <Play className="size-4 shrink-0 fill-white opacity-90" />
+                      ) : null}
+                    </span>
+                    {isGrouped ? (
+                      <span className="mt-2 flex items-center gap-1.5">
+                        {post.media.map((item, mediaIndex) => (
+                          <span
+                            key={item.src}
+                            className={cn(
+                              "size-1.5 rounded-full bg-white/45",
+                              mediaIndex === 0 ? "w-4 bg-white" : ""
+                            )}
+                            aria-hidden="true"
+                          />
+                        ))}
+                      </span>
                     ) : null}
                   </span>
-                  {isGrouped ? (
-                    <span className="mt-2 flex items-center gap-1.5">
-                      {post.media.map((item, mediaIndex) => (
-                        <span
-                          key={item.src}
-                          className={cn(
-                            "size-1.5 rounded-full bg-white/45",
-                            mediaIndex === 0 ? "w-4 bg-white" : ""
-                          )}
-                          aria-hidden="true"
-                        />
-                      ))}
-                    </span>
-                  ) : null}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex min-h-56 items-center justify-center rounded-md border border-dashed border-zinc-300 bg-white px-6 text-center">
+            <p className="max-w-sm text-base font-semibold text-zinc-600">
+              Gallery posts will appear here once media has been uploaded.
+            </p>
+          </div>
+        )}
       </div>
 
       {activePost && activeItem ? (
