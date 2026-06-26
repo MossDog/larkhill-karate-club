@@ -3,15 +3,17 @@
 import Image from "next/image";
 import {
   CheckCircle2,
+  Edit3,
   GripVertical,
   ImagePlus,
   Loader2,
   Play,
+  Save,
   Trash2,
   Upload,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,9 +39,14 @@ type RecentPost = {
   id: string;
   title: string;
   caption: string;
-  mediaCount: number;
-  coverUrl: string | null;
-  coverType: "image" | "video" | null;
+  media: RecentMedia[];
+};
+
+type RecentMedia = {
+  id: string;
+  publicUrl: string;
+  storagePath: string;
+  type: "image" | "video";
 };
 
 export function StaffGalleryUploader() {
@@ -49,6 +56,11 @@ export function StaffGalleryUploader() {
   const [recentPosts, setRecentPosts] = useState<RecentPost[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editCaption, setEditCaption] = useState("");
+  const [updatingPostId, setUpdatingPostId] = useState<string | null>(null);
+  const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,58 +89,57 @@ export function StaffGalleryUploader() {
     };
   }, []);
 
-  useEffect(() => {
+  const loadRecentPosts = useCallback(async () => {
     if (!isSupabaseConfigured) {
       return;
     }
 
-    async function loadRecentPosts() {
-      setIsLoadingPosts(true);
-      setError(null);
+    setIsLoadingPosts(true);
+    setError(null);
 
-      const supabase = createBrowserSupabaseClient();
-      const { data, error: postsError } = await supabase
-        .from("gallery_posts")
-        .select(
-          "id,title,caption,gallery_media(id,storage_path,media_type,sort_order)"
-        )
-        .order("created_at", { ascending: false })
-        .limit(5);
+    const supabase = createBrowserSupabaseClient();
+    const { data, error: postsError } = await supabase
+      .from("gallery_posts")
+      .select(
+        "id,title,caption,gallery_media(id,storage_path,media_type,sort_order)"
+      )
+      .order("created_at", { ascending: false })
+      .limit(50);
 
-      if (postsError) {
-        setError(postsError.message);
-        setIsLoadingPosts(false);
-        return;
-      }
-
-      const mappedPosts =
-        data?.map((post) => {
-          const media = [...post.gallery_media].sort(
-            (first, second) => first.sort_order - second.sort_order
-          );
-          const cover = media[0];
-          const coverUrl = cover
-            ? supabase.storage
-                .from("gallery-media")
-                .getPublicUrl(cover.storage_path).data.publicUrl
-            : null;
-
-          return {
-            id: post.id,
-            title: post.title,
-            caption: post.caption,
-            mediaCount: media.length,
-            coverUrl,
-            coverType: getMediaType(cover?.media_type),
-          };
-        }) ?? [];
-
-      setRecentPosts(mappedPosts);
+    if (postsError) {
+      setError(postsError.message);
       setIsLoadingPosts(false);
+      return;
     }
 
-    void loadRecentPosts();
+    const mappedPosts =
+      data?.map((post) => ({
+        id: post.id,
+        title: post.title,
+        caption: post.caption,
+        media: [...post.gallery_media]
+          .sort((first, second) => first.sort_order - second.sort_order)
+          .map((item) => ({
+            id: item.id,
+            publicUrl: supabase.storage
+              .from("gallery-media")
+              .getPublicUrl(item.storage_path).data.publicUrl,
+            storagePath: item.storage_path,
+            type: getMediaType(item.media_type) ?? "image",
+          })),
+      })) ?? [];
+
+    setRecentPosts(mappedPosts);
+    setIsLoadingPosts(false);
   }, []);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      void loadRecentPosts();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [loadRecentPosts]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
@@ -213,7 +224,13 @@ export function StaffGalleryUploader() {
       return;
     }
 
-    const mediaRows = [];
+    const mediaRows: Array<{
+      post_id: string;
+      storage_path: string;
+      media_type: "image" | "video";
+      alt: string;
+      sort_order: number;
+    }> = [];
 
     for (const [index, item] of queuedFiles.entries()) {
       const extension = item.file.name.split(".").pop() ?? "upload";
@@ -250,24 +267,126 @@ export function StaffGalleryUploader() {
       return;
     }
 
-    const coverUrl = supabase.storage
-      .from("gallery-media")
-      .getPublicUrl(mediaRows[0].storage_path).data.publicUrl;
-
     setRecentPosts((currentPosts) => [
       {
         id: post.id,
         title: title.trim() || caption.trim() || "Gallery post",
         caption: caption.trim(),
-        mediaCount: queuedFiles.length,
-        coverUrl,
-        coverType: queuedFiles[0].type,
+        media: mediaRows.map((mediaRow, index) => ({
+          id: mediaRow.storage_path,
+          publicUrl: supabase.storage
+            .from("gallery-media")
+            .getPublicUrl(mediaRow.storage_path).data.publicUrl,
+          storagePath: mediaRow.storage_path,
+          type: queuedFiles[index].type,
+        })),
       },
       ...currentPosts,
     ]);
     setMessage("Gallery post saved.");
     resetForm();
     setIsSaving(false);
+  };
+
+  const startEditing = (post: RecentPost) => {
+    setEditingPostId(post.id);
+    setEditTitle(post.title);
+    setEditCaption(post.caption);
+    setError(null);
+    setMessage(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingPostId(null);
+    setEditTitle("");
+    setEditCaption("");
+  };
+
+  const updatePost = async (post: RecentPost) => {
+    const nextTitle = editTitle.trim() || editCaption.trim() || "Gallery post";
+    const nextCaption = editCaption.trim();
+
+    setUpdatingPostId(post.id);
+    setError(null);
+    setMessage(null);
+
+    const supabase = createBrowserSupabaseClient();
+    const { error: updateError } = await supabase
+      .from("gallery_posts")
+      .update({
+        title: nextTitle,
+        caption: nextCaption,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", post.id);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUpdatingPostId(null);
+      return;
+    }
+
+    setRecentPosts((currentPosts) =>
+      currentPosts.map((currentPost) =>
+        currentPost.id === post.id
+          ? {
+              ...currentPost,
+              title: nextTitle,
+              caption: nextCaption,
+            }
+          : currentPost
+      )
+    );
+    setMessage("Gallery post updated.");
+    setUpdatingPostId(null);
+    cancelEditing();
+  };
+
+  const deletePost = async (post: RecentPost) => {
+    const confirmed = window.confirm(
+      `Delete "${post.title}" from the gallery? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingPostId(post.id);
+    setError(null);
+    setMessage(null);
+
+    const supabase = createBrowserSupabaseClient();
+    const { error: deleteError } = await supabase
+      .from("gallery_posts")
+      .delete()
+      .eq("id", post.id);
+
+    if (deleteError) {
+      setError(deleteError.message);
+      setDeletingPostId(null);
+      return;
+    }
+
+    const storagePaths = post.media.map((item) => item.storagePath);
+    const { error: storageError } =
+      storagePaths.length > 0
+        ? await supabase.storage.from("gallery-media").remove(storagePaths)
+        : { error: null };
+
+    setRecentPosts((currentPosts) =>
+      currentPosts.filter((currentPost) => currentPost.id !== post.id)
+    );
+    setDeletingPostId(null);
+    setEditingPostId((currentId) => (currentId === post.id ? null : currentId));
+
+    if (storageError) {
+      setError(
+        `The post was removed, but one or more media files could not be deleted: ${storageError.message}`
+      );
+      return;
+    }
+
+    setMessage("Gallery post removed.");
   };
 
   return (
@@ -453,47 +572,141 @@ export function StaffGalleryUploader() {
               </div>
             ) : null}
 
-            {recentPosts.map((post) => (
-              <div
-                key={post.id}
-                className="overflow-hidden rounded-md border border-zinc-200 bg-white"
-              >
-                <div className="grid grid-cols-[5.5rem_1fr] gap-3 p-3">
-                  <div className="relative aspect-square overflow-hidden rounded-md bg-zinc-950">
-                    {post.coverUrl ? (
-                      <RecentCover
-                        src={post.coverUrl}
-                        type={post.coverType ?? "image"}
-                        alt={post.title}
-                      />
-                    ) : null}
-                    {post.mediaCount > 1 ? (
-                      <span className="absolute right-1.5 top-1.5 rounded-full bg-black/65 px-2 py-1 text-xs font-bold text-white">
-                        1/{post.mediaCount}
-                      </span>
-                    ) : null}
+            {recentPosts.map((post) => {
+              const cover = post.media[0];
+              const isEditing = editingPostId === post.id;
+              const isUpdating = updatingPostId === post.id;
+              const isDeleting = deletingPostId === post.id;
+
+              return (
+                <div
+                  key={post.id}
+                  className="overflow-hidden rounded-md border border-zinc-200 bg-white"
+                >
+                  <div className="grid grid-cols-[5.5rem_1fr] gap-3 p-3">
+                    <div className="relative aspect-square overflow-hidden rounded-md bg-zinc-950">
+                      {cover ? (
+                        <RecentCover
+                          src={cover.publicUrl}
+                          type={cover.type}
+                          alt={post.title}
+                        />
+                      ) : null}
+                      {post.media.length > 1 ? (
+                        <span className="absolute right-1.5 top-1.5 rounded-full bg-black/65 px-2 py-1 text-xs font-bold text-white">
+                          1/{post.media.length}
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="min-w-0">
+                      {isEditing ? (
+                        <div className="space-y-3">
+                          <div className="space-y-1.5">
+                            <Label
+                              htmlFor={`edit-title-${post.id}`}
+                              className="text-sm font-bold"
+                            >
+                              Title
+                            </Label>
+                            <Input
+                              id={`edit-title-${post.id}`}
+                              value={editTitle}
+                              onChange={(event) =>
+                                setEditTitle(event.target.value)
+                              }
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label
+                              htmlFor={`edit-caption-${post.id}`}
+                              className="text-sm font-bold"
+                            >
+                              Caption
+                            </Label>
+                            <Textarea
+                              id={`edit-caption-${post.id}`}
+                              className="min-h-24"
+                              value={editCaption}
+                              onChange={(event) =>
+                                setEditCaption(event.target.value)
+                              }
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="truncate text-lg font-black">
+                            {post.title}
+                          </p>
+                          <p className="text-zinc-700">
+                            {post.media.length}{" "}
+                            {post.media.length === 1 ? "item" : "items"}
+                          </p>
+                          <p className="mt-1 line-clamp-2 text-zinc-700">
+                            {post.caption || "No caption"}
+                          </p>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-lg font-black">{post.title}</p>
-                    <p className="text-zinc-700">
-                      {post.mediaCount} {post.mediaCount === 1 ? "item" : "items"}
-                    </p>
-                    <p className="mt-1 line-clamp-2 text-zinc-700">
-                      {post.caption || "No caption"}
-                    </p>
+                  <div className="flex flex-wrap gap-2 border-t border-zinc-100 p-3">
+                    {isEditing ? (
+                      <>
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => updatePost(post)}
+                          disabled={isUpdating || isDeleting}
+                          className="bg-red-700 text-white hover:bg-red-800"
+                        >
+                          {isUpdating ? (
+                            <Loader2 className="size-4 animate-spin" />
+                          ) : (
+                            <Save className="size-4" />
+                          )}
+                          Save
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={cancelEditing}
+                          disabled={isUpdating}
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => startEditing(post)}
+                        disabled={isDeleting}
+                      >
+                        <Edit3 className="size-4" />
+                        Edit
+                      </Button>
+                    )}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => deletePost(post)}
+                      disabled={isUpdating || isDeleting}
+                      className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
+                    >
+                      {isDeleting ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="size-4" />
+                      )}
+                      Remove
+                    </Button>
                   </div>
                 </div>
-                <div className="flex gap-2 border-t border-zinc-100 p-3">
-                  <Button variant="outline" size="sm">
-                    Edit
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Trash2 className="size-4" />
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       </aside>
