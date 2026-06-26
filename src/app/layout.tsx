@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Larkhill Karate Club",
   description:
     "Kenpo karate classes for children, teens, and adults in Santry, Dublin.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
