@@ -57,8 +57,8 @@ export const coaches: Coach[] = [
     role: "Coach",
     classFocus: "Tuesday Kata",
     image: {
-      src: "/placeholders/coaches/dylan.png",
-      alt: "Coach Joe",
+      src: "/media/coaches/dylan.png",
+      alt: "Coach Dylan",
       width: 512,
       height: 512,
     },
@@ -68,8 +68,8 @@ export const coaches: Coach[] = [
     role: "Coach",
     classFocus: "Tuesday Kata",
     image: {
-      src: "/placeholders/coaches/joe.png",
-      alt: "Coach Dylan",
+      src: "/media/coaches/joe.png",
+      alt: "Coach Joe",
       width: 512,
       height: 512,
     },
@@ -79,7 +79,7 @@ export const coaches: Coach[] = [
     role: "Coach",
     classFocus: "Thursday Kumite",
     image: {
-      src: "/placeholders/coaches/shauna.png",
+      src: "/media/coaches/shauna.png",
       alt: "Coach Shauna",
       width: 512,
       height: 512,
@@ -93,7 +93,7 @@ export const classTimetable: ClassDay[] = [
     focus: "Kata",
     coaches: ["Joe", "Dylan"],
     image: {
-      src: "/placeholders/kata/b.jpg",
+      src: "/media/classes/kata.jpg",
       alt: "Larkhill Karate Club kata class",
       width: 1024,
       height: 657,
@@ -122,7 +122,7 @@ export const classTimetable: ClassDay[] = [
     focus: "Kumite",
     coaches: ["Shauna"],
     image: {
-      src: "/placeholders/kumite/a.jpg",
+      src: "/media/classes/kumite.jpg",
       alt: "Larkhill Karate Club kumite class",
       width: 1024,
       height: 650,
