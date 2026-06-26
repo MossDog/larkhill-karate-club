@@ -19,12 +19,20 @@ import { Separator } from "@/components/ui/separator";
 import {
   classTimetable,
   clubContact,
+  coaches,
   galleryPosts,
   karateDiscipline,
 } from "@/lib/club-content";
+import { getUploadedGalleryPosts } from "@/lib/gallery";
 import { cn } from "@/lib/utils";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const uploadedGalleryPosts = await getUploadedGalleryPosts();
+  const visibleGalleryPosts =
+    uploadedGalleryPosts.length > 0 ? uploadedGalleryPosts : galleryPosts;
+
   return (
     <main className="min-h-screen bg-[#f8f7f4] pb-24 text-zinc-950 md:pb-0">
       <nav className="fixed bottom-3 left-1/2 z-40 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center justify-around rounded-3xl border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-bold text-zinc-700 shadow-lg backdrop-blur lg:bottom-auto lg:left-4 lg:top-1/2 lg:grid lg:w-max lg:max-w-none lg:-translate-x-0 lg:-translate-y-1/2 lg:grid-cols-1 lg:p-0">
@@ -36,15 +44,11 @@ export default function Home() {
           Gallery
         </Link>
         <Separator className="hidden w-8 lg:block lg:justify-self-center" />
-        <Link className="px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center" href="#contact">
-          Contact
-        </Link>
-        <Separator className="hidden w-8 lg:block lg:justify-self-center" />
         <Link
           className="rounded-b-3xl px-3 hover:bg-zinc-100 lg:w-full lg:px-4 lg:py-4 lg:text-center"
-          href="/staff/gallery"
+          href="#contact"
         >
-          Staff
+          Contact
         </Link>
       </nav>
 
@@ -94,6 +98,43 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-5 py-14">
+        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="text-sm font-bold uppercase text-red-700">
+              Club coaches
+            </p>
+            <h2 className="mt-2 text-3xl font-black">Meet the team</h2>
+          </div>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {coaches.map((coach) => (
+            <Card
+              key={coach.name}
+              className="overflow-hidden rounded-md border-zinc-300 pt-0 shadow-sm"
+            >
+              <div className="relative aspect-square bg-zinc-950">
+                <Image
+                  src={coach.image.src}
+                  alt={coach.image.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
+              <CardHeader>
+                <CardTitle className="text-2xl font-black">
+                  {coach.name}
+                </CardTitle>
+                <CardDescription className="text-base text-zinc-700">
+                  {coach.role} | {coach.classFocus}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      </section>
+
       <section id="classes" className="mx-auto max-w-6xl px-5 py-14">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
@@ -102,10 +143,6 @@ export default function Home() {
             </p>
             <h2 className="mt-2 text-3xl font-black">Train during the week</h2>
           </div>
-          <p className="max-w-xl text-lg leading-8 text-zinc-700">
-            Tuesday kata and Thursday kumite classes, led by named coaches across
-            age-appropriate groups.
-          </p>
         </div>
         <div className="grid gap-5 lg:grid-cols-2">
           {classTimetable.map((item) => (
@@ -169,11 +206,8 @@ export default function Home() {
               </p>
               <h2 className="mt-2 text-3xl font-black">Media from the club</h2>
             </div>
-            <p className="max-w-xl text-lg leading-8 text-zinc-700">
-              A simple scrolling feed for photos and videos uploaded by staff.
-            </p>
           </div>
-          <GalleryFeed posts={galleryPosts} />
+          <GalleryFeed posts={visibleGalleryPosts} />
         </div>
       </section>
 

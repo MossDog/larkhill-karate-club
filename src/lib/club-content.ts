@@ -31,6 +31,18 @@ export type GalleryPost = {
   media: GalleryMedia[];
 };
 
+export type Coach = {
+  name: string;
+  role: string;
+  classFocus: string;
+  image: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
+};
+
 export const clubContact = {
   email: "Larkhilldojo@gmail.com",
   address: "Unit 4, Santry Hall Industrial Estate, Santry, Dublin 9, D09 V409",
@@ -38,6 +50,42 @@ export const clubContact = {
 };
 
 export const karateDiscipline = "Kenpo";
+
+export const coaches: Coach[] = [
+  {
+    name: "Dylan",
+    role: "Coach",
+    classFocus: "Tuesday Kata",
+    image: {
+      src: "/placeholders/coaches/dylan.png",
+      alt: "Coach Joe",
+      width: 512,
+      height: 512,
+    },
+  },
+  {
+    name: "Joe",
+    role: "Coach",
+    classFocus: "Tuesday Kata",
+    image: {
+      src: "/placeholders/coaches/joe.png",
+      alt: "Coach Dylan",
+      width: 512,
+      height: 512,
+    },
+  },
+  {
+    name: "Shauna",
+    role: "Coach",
+    classFocus: "Thursday Kumite",
+    image: {
+      src: "/placeholders/coaches/shauna.png",
+      alt: "Coach Shauna",
+      width: 512,
+      height: 512,
+    },
+  },
+];
 
 export const classTimetable: ClassDay[] = [
   {
@@ -57,15 +105,15 @@ export const classTimetable: ClassDay[] = [
       },
       {
         group: "7-9 years",
-        time: "6:15 PM to 7:00 PM",
+        time: "6:00 PM to 7:00 PM",
       },
       {
         group: "10-12 years",
-        time: "7:15 PM to 8:00 PM",
+        time: "7:00 PM to 8:00 PM",
       },
       {
         group: "13+ years",
-        time: "8:15 PM to 9:00 PM",
+        time: "8:00 PM to 9:00 PM",
       },
     ],
   },
