@@ -90,20 +90,14 @@ export default async function Home() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="#classes"
+                  href="#contact"
                   className={cn(
                     buttonVariants({ size: "lg" }),
                     "bg-red-700 text-white hover:bg-red-800"
                   )}
                 >
-                  View classes
-                  <ChevronRight className="size-5" />
-                </Link>
-                <Link
-                  href="#contact"
-                  className={buttonVariants({ size: "lg", variant: "outline" })}
-                >
                   Contact the club
+                  <ChevronRight className="size-5" />
                 </Link>
               </div>
             </div>
@@ -119,9 +113,9 @@ export default async function Home() {
               Club coaches
             </p>
             <h2 className="mt-2 text-3xl font-black">Meet the team</h2>
-            <p className="mt-4 text-lg leading-8 text-zinc-700">
+            <p className="text-lg leading-8 text-zinc-700">
               Training is led by three dedicated coaches, giving students
-              steady guidance and support as they build confidence, develop
+              guidance and support as they build confidence, develop
               technique, and progress through the Kenpo Karate system.
             </p>
           </div>
@@ -162,10 +156,9 @@ export default async function Home() {
               Class timetable
             </p>
             <h2 className="mt-2 text-3xl font-black">Train during the week</h2>
-            <p className="mt-4 text-lg leading-8 text-zinc-700">
+            <p className="text-lg leading-8 text-zinc-700">
               Classes are organised by age and training focus, helping students
-              learn at the right pace while still feeling part of the wider
-              club.
+              learn at the right pace.
             </p>
           </div>
         </div>
@@ -233,7 +226,7 @@ export default async function Home() {
               <h2 className="mt-2 text-3xl font-black">
                 Gradings, squads, and competition
               </h2>
-              <p className="mt-4 text-lg leading-8 text-zinc-700">
+              <p className="text-lg leading-8 text-zinc-700">
                 Students can train recreationally, work towards gradings, or
                 represent the club at home and national competitions. Competing
                 is always optional, but the pathway is there for members who
@@ -357,7 +350,7 @@ export default async function Home() {
                 </p>
                 <a
                   href={`mailto:${clubContact.email}`}
-                  className="mt-1 block break-words text-lg font-bold text-zinc-950 hover:text-red-700"
+                  className="mt-1 block wrap-break-word text-lg font-bold text-zinc-950 hover:text-red-700"
                 >
                   {clubContact.email}
                 </a>
