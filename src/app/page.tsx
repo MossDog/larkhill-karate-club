@@ -75,12 +75,12 @@ export default async function Home() {
               </h1>
               <div className="mt-5 max-w-2xl space-y-5 text-xl leading-8 text-zinc-700">
                 <p>
-                  Larkhill Karate Club has been proudly established for 18
+                  Larkhill Karate Club, member of the Irish Kenpo Karate Union, has been proudly established for 18
                   years, providing high-quality martial arts training in a
                   friendly, supportive, and inclusive environment.
                 </p>
                 <p>
-                  We welcome members from 5 years old through to adults, with
+                  We welcome members from 5 years through to adults, with
                   classes designed for different ages and experience levels.
                   Whether you&apos;re looking to improve fitness, build
                   confidence, learn self-defence, or compete, there&apos;s a
@@ -385,9 +385,9 @@ export default async function Home() {
                   <Ticket className="size-10 stroke-1 text-red-700" />
                 </span>
                 <div>
-                  <p className="text-xl font-black">First class free</p>
+                  <p className="text-xl font-black">First two classes free</p>
                   <p className="mt-2 text-zinc-700">
-                    New students can come along for a trial class before
+                    New students can come along for two trial classes before
                     deciding whether to join.
                   </p>
                 </div>

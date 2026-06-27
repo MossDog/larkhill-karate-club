@@ -102,7 +102,7 @@ export const classTimetable: ClassDay[] = [
     },
     sessions: [
       {
-        group: "4-6 years",
+        group: "5-6 years",
         time: "5:30 PM to 6:00 PM",
       },
       {
