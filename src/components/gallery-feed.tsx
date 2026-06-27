@@ -135,7 +135,7 @@ export function GalleryFeed({ posts }: GalleryFeedProps) {
 
   return (
     <>
-      <div className="max-h-[560px] overflow-y-auto rounded-md border border-zinc-200 bg-[#f8f7f4] p-2 sm:p-3">
+      <div className="max-h-[560px] overflow-y-auto rounded-md border border-zinc-200 bg-white p-2 sm:p-3">
         {hasPosts ? (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
             {posts.map((post, index) => {
