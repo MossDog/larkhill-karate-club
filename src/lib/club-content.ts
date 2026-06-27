@@ -44,12 +44,14 @@ export type Coach = {
 };
 
 export const clubContact = {
-  email: "Larkhilldojo@gmail.com",
+  email: "larkhilldojo@gmail.com",
+  phone: "0879325172",
   address: "Unit 4, Santry Hall Industrial Estate, Santry, Dublin 9, D09 V409",
   locality: "Santry, Dublin",
+  parking: "Parking is available outside the club entrance.",
+  mapsUrl: "https://www.google.com/maps/place/Larkhill+Karate+Club/@53.3946335,-6.2506171,17z/data=!3m1!4b1!4m6!3m5!1s0x48670e27db2f3f19:0x37ef144d43c5a36e!8m2!3d53.3946335!4d-6.2480422!16s%2Fg%2F11bbrjb_t5?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D",
+  facebookUrl: "https://www.facebook.com/LarkhillKarateClub",
 };
-
-export const karateDiscipline = "Kenpo";
 
 export const coaches: Coach[] = [
   {
