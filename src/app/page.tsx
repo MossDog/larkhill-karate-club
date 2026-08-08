@@ -8,7 +8,6 @@ import {
   MapPin,
   Medal,
   MessageCircle,
-  Phone,
   Ticket,
   Trophy,
 } from "lucide-react";
@@ -335,113 +334,72 @@ export default async function Home() {
 
       {/** CONTACT SECTION */}
       <section id="contact" className="px-5 py-14 bg-white">
-        <Card className="mx-auto max-w-6xl rounded-md border-zinc-300">
+        <Card className="mx-auto max-w-2xl rounded-md border-zinc-300">
           <CardHeader>
             <CardTitle className="text-3xl font-black">Start training</CardTitle>
             <CardDescription className="text-base">
               Contact the club with any questions.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-start">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-md border border-zinc-200 bg-[#f8f7f4] p-4">
-                <Mail className="size-5 text-red-700" />
-                <p className="mt-3 text-sm font-bold uppercase text-zinc-500">
-                  Email
+          <CardContent>
+            <div className="flex items-start gap-4 rounded-md border border-red-100 bg-red-50/60 p-4">
+              <Ticket className="mt-0.5 size-9 shrink-0 stroke-1.5 text-red-700" />
+              <div>
+                <p className="text-xl font-black">First two classes free</p>
+                <p className="mt-2 text-zinc-700">
+                  New students can come along for two trial classes before
+                  deciding whether to join.
                 </p>
-                <a
-                  href={`mailto:${clubContact.email}`}
-                  className="mt-1 block wrap-break-word text-lg font-bold text-zinc-950 hover:text-red-700"
-                >
-                  {clubContact.email}
-                </a>
-              </div>
-              <div className="rounded-md border border-zinc-200 bg-[#f8f7f4] p-4">
-                <Phone className="size-5 text-red-700" />
-                <p className="mt-3 text-sm font-bold uppercase text-zinc-500">
-                  Phone
-                </p>
-                <a
-                  href={`tel:${clubContact.phone}`}
-                  className="mt-1 block text-lg font-bold text-zinc-950 hover:text-red-700"
-                >
-                  {clubContact.phone}
-                </a>
-              </div>
-              <div className="rounded-md border border-zinc-200 bg-[#f8f7f4] p-4 sm:col-span-2">
-                <MapPin className="size-5 text-red-700" />
-                <p className="mt-3 text-sm font-bold uppercase text-zinc-500">
-                  Location
-                </p>
-                <p className="mt-1 text-lg font-bold text-zinc-950">
-                  {clubContact.address}
-                </p>
-                <p className="mt-2 text-zinc-700">{clubContact.parking}</p>
               </div>
             </div>
 
-            <div className="rounded-md border border-zinc-200 bg-white p-4 shadow-sm">
-              <div className="flex items-start gap-3">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-md ">
-                  <Ticket className="size-10 stroke-1 text-red-700" />
-                </span>
-                <div>
-                  <p className="text-xl font-black">First two classes free</p>
-                  <p className="mt-2 text-zinc-700">
-                    New students can come along for two trial classes before
-                    deciding whether to join.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                <a
-                  href={`mailto:${clubContact.email}`}
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "bg-red-700 text-white hover:bg-red-800"
-                  )}
-                >
-                  <Mail className="size-5" />
-                  Email the club
-                </a>
-                <a
-                  href={clubContact.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ size: "lg", variant: "outline" }),
-                    "justify-center"
-                  )}
-                >
-                  <MapPin className="size-5" />
-                  Open in Google Maps
-                </a>
-                <a
-                  href={clubContact.facebookUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ size: "lg", variant: "outline" }),
-                    "justify-center"
-                  )}
-                >
-                  <ExternalLink className="size-5" />
-                  Facebook
-                </a>
-                <a
-                  href={clubContact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ size: "lg", variant: "outline" }),
-                    "justify-center"
-                  )}
-                >
-                  <MessageCircle className="size-5" />
-                  WhatsApp
-                </a>
-              </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <a
+                href={`mailto:${clubContact.email}`}
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "bg-red-700 text-white hover:bg-red-800"
+                )}
+              >
+                <Mail className="size-5" />
+                Email the club
+              </a>
+              <a
+                href={clubContact.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "bg-green-700 text-white hover:bg-green-800"
+                )}
+              >
+                <MessageCircle className="size-5" />
+                WhatsApp
+              </a>
+              <a
+                href={clubContact.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  "justify-center"
+                )}
+              >
+                <MapPin className="size-5" />
+                Google Maps
+              </a>
+              <a
+                href={clubContact.facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  "justify-center"
+                )}
+              >
+                <ExternalLink className="size-5" />
+                Facebook
+              </a>
             </div>
           </CardContent>
         </Card>
