@@ -7,6 +7,7 @@ import {
   Mail,
   MapPin,
   Medal,
+  MessageCircle,
   Phone,
   Ticket,
   Trophy,
@@ -75,7 +76,7 @@ export default async function Home() {
               </h1>
               <div className="mt-5 max-w-2xl space-y-5 text-xl leading-8 text-zinc-700">
                 <p>
-                  Larkhill Karate Club, member of the Irish Kenpo Karate Union, has been proudly established for 18
+                  Larkhill Karate Club has been proudly established for 18
                   years, providing high-quality martial arts training in a
                   friendly, supportive, and inclusive environment.
                 </p>
@@ -427,6 +428,18 @@ export default async function Home() {
                 >
                   <ExternalLink className="size-5" />
                   Facebook
+                </a>
+                <a
+                  href={clubContact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    buttonVariants({ size: "lg", variant: "outline" }),
+                    "justify-center"
+                  )}
+                >
+                  <MessageCircle className="size-5" />
+                  WhatsApp
                 </a>
               </div>
             </div>
