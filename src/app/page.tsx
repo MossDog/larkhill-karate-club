@@ -333,27 +333,32 @@ export default async function Home() {
       </section>
 
       {/** CONTACT SECTION */}
-      <section id="contact" className="px-5 py-14 bg-white">
-        <Card className="mx-auto max-w-2xl rounded-md border-zinc-300">
-          <CardHeader>
-            <CardTitle className="text-3xl font-black">Start training</CardTitle>
-            <CardDescription className="text-base">
-              Contact the club with any questions.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-start gap-4 rounded-md border border-red-100 bg-red-50/60 p-4">
-              <Ticket className="mt-0.5 size-9 shrink-0 stroke-1.5 text-red-700" />
+      <section id="contact" className="px-5 py-12 bg-white">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div className="max-w-xl">
+            <p className="text-sm font-bold uppercase text-red-700">
+              Contact
+            </p>
+            <h2 className="mt-2 text-3xl font-black">Start training</h2>
+            <p className="mt-3 text-lg leading-8 text-zinc-700">
+              Contact the club with any questions. New students can come along
+              for two trial classes before deciding whether to join.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-zinc-200 bg-[#f8f7f4] p-4">
+            <div className="mb-4 flex items-start gap-3">
+              <Ticket className="mt-0.5 size-8 shrink-0 stroke-1.5 text-red-700" />
               <div>
-                <p className="text-xl font-black">First two classes free</p>
-                <p className="mt-2 text-zinc-700">
-                  New students can come along for two trial classes before
-                  deciding whether to join.
+                <p className="text-lg font-black">First two classes free</p>
+                <p className="mt-1 text-sm leading-6 text-zinc-700">
+                  Ask about classes, directions, or coming along for a first
+                  session.
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               <a
                 href={`mailto:${clubContact.email}`}
                 className={cn(
@@ -401,8 +406,8 @@ export default async function Home() {
                 Facebook
               </a>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </section>
 
       <footer className="border-t border-zinc-200 bg-white py-3">
