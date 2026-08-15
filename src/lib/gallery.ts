@@ -15,7 +15,6 @@ type GalleryPostRow = {
   caption: string;
   gallery_media: GalleryMediaRow[];
   id: string;
-  title: string;
 };
 
 export async function getUploadedGalleryPosts(): Promise<GalleryPost[]> {
@@ -27,7 +26,7 @@ export async function getUploadedGalleryPosts(): Promise<GalleryPost[]> {
   const { data, error } = await supabase
     .from("gallery_posts")
     .select(
-      "id,title,caption,gallery_media(alt,height,media_type,sort_order,storage_path,width)"
+      "id,caption,gallery_media(alt,height,media_type,sort_order,storage_path,width)"
     )
     .order("created_at", { ascending: false });
 
@@ -50,7 +49,7 @@ export async function getUploadedGalleryPosts(): Promise<GalleryPost[]> {
             src: supabase.storage
               .from("gallery-media")
               .getPublicUrl(item.storage_path).data.publicUrl,
-            alt: item.alt || post.title || post.caption || "Club gallery media",
+            alt: item.alt || post.caption || "Club gallery media",
             type,
             width: item.width ?? 1080,
             height: item.height ?? 1080,
@@ -60,7 +59,7 @@ export async function getUploadedGalleryPosts(): Promise<GalleryPost[]> {
 
       return {
         id: post.id,
-        caption: post.caption || post.title || "Club gallery post",
+        caption: post.caption || "Club gallery post",
         media,
       };
     })
