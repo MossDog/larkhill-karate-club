@@ -23,7 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
@@ -37,7 +36,6 @@ type QueuedFile = {
 
 type RecentPost = {
   id: string;
-  title: string;
   caption: string;
   media: RecentMedia[];
 };
@@ -50,14 +48,12 @@ type RecentMedia = {
 };
 
 export function StaffGalleryUploader() {
-  const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [queuedFiles, setQueuedFiles] = useState<QueuedFile[]>([]);
   const [recentPosts, setRecentPosts] = useState<RecentPost[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
-  const [editTitle, setEditTitle] = useState("");
   const [editCaption, setEditCaption] = useState("");
   const [updatingPostId, setUpdatingPostId] = useState<string | null>(null);
   const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
@@ -101,7 +97,7 @@ export function StaffGalleryUploader() {
     const { data, error: postsError } = await supabase
       .from("gallery_posts")
       .select(
-        "id,title,caption,gallery_media(id,storage_path,media_type,sort_order)"
+        "id,caption,gallery_media(id,storage_path,media_type,sort_order)"
       )
       .order("created_at", { ascending: false })
       .limit(50);
@@ -115,7 +111,6 @@ export function StaffGalleryUploader() {
     const mappedPosts =
       data?.map((post) => ({
         id: post.id,
-        title: post.title,
         caption: post.caption,
         media: [...post.gallery_media]
           .sort((first, second) => first.sort_order - second.sort_order)
@@ -178,7 +173,6 @@ export function StaffGalleryUploader() {
   const resetForm = () => {
     queuedFiles.forEach((item) => URL.revokeObjectURL(item.previewUrl));
     setQueuedFiles([]);
-    setTitle("");
     setCaption("");
   };
 
@@ -211,7 +205,6 @@ export function StaffGalleryUploader() {
     const { data: post, error: postError } = await supabase
       .from("gallery_posts")
       .insert({
-        title: title.trim() || caption.trim() || "Gallery post",
         caption: caption.trim(),
         created_by: userData.user.id,
       })
@@ -252,7 +245,7 @@ export function StaffGalleryUploader() {
         post_id: post.id,
         storage_path: storagePath,
         media_type: item.type,
-        alt: title.trim() || caption.trim() || "Larkhill Karate Club media",
+        alt: caption.trim() || "Larkhill Karate Club media",
         sort_order: index,
       });
     }
@@ -270,7 +263,6 @@ export function StaffGalleryUploader() {
     setRecentPosts((currentPosts) => [
       {
         id: post.id,
-        title: title.trim() || caption.trim() || "Gallery post",
         caption: caption.trim(),
         media: mediaRows.map((mediaRow, index) => ({
           id: mediaRow.storage_path,
@@ -290,7 +282,6 @@ export function StaffGalleryUploader() {
 
   const startEditing = (post: RecentPost) => {
     setEditingPostId(post.id);
-    setEditTitle(post.title);
     setEditCaption(post.caption);
     setError(null);
     setMessage(null);
@@ -298,12 +289,10 @@ export function StaffGalleryUploader() {
 
   const cancelEditing = () => {
     setEditingPostId(null);
-    setEditTitle("");
     setEditCaption("");
   };
 
   const updatePost = async (post: RecentPost) => {
-    const nextTitle = editTitle.trim() || editCaption.trim() || "Gallery post";
     const nextCaption = editCaption.trim();
 
     setUpdatingPostId(post.id);
@@ -314,7 +303,6 @@ export function StaffGalleryUploader() {
     const { error: updateError } = await supabase
       .from("gallery_posts")
       .update({
-        title: nextTitle,
         caption: nextCaption,
         updated_at: new Date().toISOString(),
       })
@@ -331,7 +319,6 @@ export function StaffGalleryUploader() {
         currentPost.id === post.id
           ? {
               ...currentPost,
-              title: nextTitle,
               caption: nextCaption,
             }
           : currentPost
@@ -344,7 +331,7 @@ export function StaffGalleryUploader() {
 
   const deletePost = async (post: RecentPost) => {
     const confirmed = window.confirm(
-      `Delete "${post.title}" from the gallery? This cannot be undone.`
+      `Delete ${getPostLabel(post)} from the gallery? This cannot be undone.`
     );
 
     if (!confirmed) {
@@ -506,19 +493,6 @@ export function StaffGalleryUploader() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="post-title" className="text-lg font-bold">
-                  Post title
-                </Label>
-                <Input
-                  id="post-title"
-                  className="h-14 text-lg"
-                  placeholder="Squad training"
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="post-caption" className="text-lg font-bold">
                   Caption
                 </Label>
@@ -589,7 +563,7 @@ export function StaffGalleryUploader() {
                         <RecentCover
                           src={cover.publicUrl}
                           type={cover.type}
-                          alt={post.title}
+                          alt={post.caption || "Larkhill Karate Club media"}
                         />
                       ) : null}
                       {post.media.length > 1 ? (
@@ -601,21 +575,6 @@ export function StaffGalleryUploader() {
                     <div className="min-w-0">
                       {isEditing ? (
                         <div className="space-y-3">
-                          <div className="space-y-1.5">
-                            <Label
-                              htmlFor={`edit-title-${post.id}`}
-                              className="text-sm font-bold"
-                            >
-                              Title
-                            </Label>
-                            <Input
-                              id={`edit-title-${post.id}`}
-                              value={editTitle}
-                              onChange={(event) =>
-                                setEditTitle(event.target.value)
-                              }
-                            />
-                          </div>
                           <div className="space-y-1.5">
                             <Label
                               htmlFor={`edit-caption-${post.id}`}
@@ -635,15 +594,12 @@ export function StaffGalleryUploader() {
                         </div>
                       ) : (
                         <>
-                          <p className="truncate text-lg font-black">
-                            {post.title}
+                          <p className="line-clamp-2 text-lg font-black">
+                            {post.caption || "No caption"}
                           </p>
                           <p className="text-zinc-700">
                             {post.media.length}{" "}
                             {post.media.length === 1 ? "item" : "items"}
-                          </p>
-                          <p className="mt-1 line-clamp-2 text-zinc-700">
-                            {post.caption || "No caption"}
                           </p>
                         </>
                       )}
@@ -784,4 +740,8 @@ function getMediaType(value: string | null | undefined): "image" | "video" | nul
   }
 
   return null;
+}
+
+function getPostLabel(post: RecentPost) {
+  return post.caption.trim() ? `"${post.caption}"` : "this post";
 }
